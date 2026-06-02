@@ -1,6 +1,6 @@
 <template>
    <main>
-      <h1>Speak Darija</h1>
+      <h1>Parler Darija</h1>
 
       <textarea
          v-model="frenchText"
