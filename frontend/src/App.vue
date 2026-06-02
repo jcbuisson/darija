@@ -15,9 +15,10 @@
 
     <p v-if="error" class="error">{{ error }}</p>
 
-    <section v-if="darijaText">
+    <section v-if="darijaFrench">
       <h2>Darija</h2>
-      <p>{{ darijaText }}</p>
+      <p class="darija-french">{{ darijaFrench }}</p>
+      <p v-if="darijaArabic" class="darija-arabic" dir="rtl">{{ darijaArabic }}</p>
       <audio :src="audioUrl" controls autoplay />
     </section>
   </main>
@@ -27,7 +28,8 @@
 import { ref } from 'vue';
 
 const frenchText = ref('');
-const darijaText = ref('');
+const darijaFrench = ref('');
+const darijaArabic = ref('');
 const audioUrl = ref('');
 const loading = ref(false);
 const error = ref('');
@@ -35,7 +37,8 @@ const error = ref('');
 async function speak() {
   loading.value = true;
   error.value = '';
-  darijaText.value = '';
+  darijaFrench.value = '';
+  darijaArabic.value = '';
   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
   audioUrl.value = '';
 
@@ -48,7 +51,8 @@ async function speak() {
 
     if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
-    darijaText.value = decodeURIComponent(res.headers.get('X-Darija-Text') ?? '');
+    darijaFrench.value = decodeURIComponent(res.headers.get('X-Darija-French') ?? '');
+    darijaArabic.value = decodeURIComponent(res.headers.get('X-Darija-Arabic') ?? '');
     audioUrl.value = URL.createObjectURL(await res.blob());
   } catch (err) {
     error.value = err.message;
@@ -93,6 +97,15 @@ button {
 button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 section { margin-top: 2rem; }
+
+.darija-french { font-size: 1.1rem; }
+
+.darija-arabic {
+  font-size: 1.3rem;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  color: #555;
+  margin-top: 0.25rem;
+}
 
 audio { display: block; margin-top: 0.75rem; width: 100%; }
 

@@ -46,7 +46,7 @@ export default defineConfig({
       open: true,
       host: true, // allows for external device connection on local network
       proxy: {
-         '^/speak': 'http://localhost:3000',
+         '^/speak': 'http://localhost:3018',
       }
    },
 })
