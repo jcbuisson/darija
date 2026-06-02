@@ -35,4 +35,5 @@ app.post('/speak', async (req, res) => {
   res.send(Buffer.from(await audio.arrayBuffer()));
 });
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+const PORT = process.env.PORT || 3000
+app.httpServer.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`))
