@@ -36,4 +36,4 @@ app.post('/speak', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000
-app.httpServer.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`))
