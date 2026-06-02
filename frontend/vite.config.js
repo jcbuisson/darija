@@ -17,22 +17,22 @@ export default defineConfig({
          base: "/",
          srcDir: "src",
          filename: "sw.ts",
-         includeAssets: ["icons/chess-king.svg"],
+         includeAssets: ["icons/arabic-crescent.svg"],
          injectManifest: {
             globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,woff,woff2,ttf,eot,wasm}'],
             maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4M max for build chunks
          },
 
          manifest: {
-            name: "Chess",
-            short_name: "Chess",
+            name: "Darija",
+            short_name: "Darija",
             theme_color: "#ffffff",
             start_url: "/",
             display: "standalone",
             background_color: "#ffffff",
             icons: [
                {
-                  src: "icons/chess-king.svg",
+                  src: "icons/arabic-crescent.svg",
                   sizes: "any",
                   type: "image/svg+xml",
                   purpose: "any maskable",
