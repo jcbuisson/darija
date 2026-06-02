@@ -4,7 +4,7 @@
 
       <textarea
          v-model="frenchText"
-         placeholder="2Entrez une phrase en français…"
+         placeholder="Entrez une phrase en français…"
          rows="4"
          :disabled="loading"
       />
