@@ -17,7 +17,7 @@ export default defineConfig({
          base: "/",
          srcDir: "src",
          filename: "sw.ts",
-         includeAssets: ["icons/arabic-crescent.svg"],
+         includeAssets: ["icons/morocco-flag.svg"],
          injectManifest: {
             globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,woff,woff2,ttf,eot,wasm}'],
             maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4M max for build chunks
@@ -26,13 +26,13 @@ export default defineConfig({
          manifest: {
             name: "Darija",
             short_name: "Darija",
-            theme_color: "#ffffff",
+            theme_color: "#C1272D",
             start_url: "/",
             display: "standalone",
             background_color: "#ffffff",
             icons: [
                {
-                  src: "icons/arabic-crescent.svg",
+                  src: "icons/morocco-flag.svg",
                   sizes: "any",
                   type: "image/svg+xml",
                   purpose: "any maskable",

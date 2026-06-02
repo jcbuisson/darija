@@ -1,31 +1,28 @@
 <script setup lang="ts">
 /// <reference types="vite-plugin-pwa/vue" />
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 // check new version every 10s
-const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
+const { needRefresh, updateServiceWorker } = useRegisterSW({
    onRegistered(r) {
-      r &&
-         setInterval(() => {
-            r.update();
-         }, 10000);
+      r && setInterval(() => r.update(), 10000);
    },
 });
 
+const updating = ref(false);
+
 // Automatically update when new version is available
 watch(needRefresh, (value) => {
-   if (value) {
-      console.log("🔄 New version available, updating automatically...");
-      updateServiceWorker(true); // true = reload page after update
+   if (value && !updating.value) {
+      updating.value = true; // hide banner immediately — page will reload or fail silently
+      updateServiceWorker(true);
    }
 });
 </script>
 
 <template>
-   <!-- Optional: Show a subtle notification that update is happening -->
-   <!-- Remove or comment out if you want completely silent updates -->
-   <div v-if="needRefresh" class="pwatoast">
+   <div v-if="needRefresh && !updating" class="pwatoast">
       Mise à jour en cours...
    </div>
 </template>

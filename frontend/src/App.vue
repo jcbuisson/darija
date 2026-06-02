@@ -2,12 +2,21 @@
    <main>
       <h1>Parler Darija</h1>
 
-      <textarea
-         v-model="frenchText"
-         placeholder="Entrez une phrase en français…"
-         rows="4"
-         :disabled="loading"
-      />
+      <div class="textarea-wrap">
+         <textarea
+            v-model="frenchText"
+            placeholder="Entrez une phrase en français…"
+            rows="4"
+            :disabled="loading"
+         />
+         <button
+            v-if="frenchText"
+            class="clear-btn"
+            @click="frenchText = ''"
+            aria-label="Effacer"
+            :disabled="loading"
+         >×</button>
+      </div>
 
       <button @click="speak" :disabled="loading || !frenchText.trim()">
          {{ loading ? 'En cours…' : 'Traduire & Parler' }}
@@ -80,14 +89,41 @@ body {
 
 h1 { margin-bottom: 1.5rem; }
 
+.textarea-wrap {
+   position: relative;
+}
+
 textarea {
    width: 100%;
-   padding: 0.75rem;
+   padding: 0.75rem 2.5rem 0.75rem 0.75rem;
    font-size: 1rem;
    border: 1px solid #ccc;
    border-radius: 6px;
    resize: vertical;
 }
+
+.clear-btn {
+   position: absolute;
+   top: 0;
+   right: 0;
+   width: 2.5rem;
+   height: 2.5rem;
+   margin: 0;
+   padding: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: transparent;
+   color: #999;
+   font-size: 1.4rem;
+   line-height: 1;
+   border: none;
+   border-radius: 0 6px 0 0;
+   cursor: pointer;
+}
+
+.clear-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.clear-btn:not(:disabled):hover { color: #333; }
 
 button {
    margin-top: 0.75rem;
