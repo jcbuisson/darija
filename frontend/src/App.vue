@@ -28,7 +28,7 @@
          <h2>Darija</h2>
          <p class="darija-french">{{ darijaFrench }}</p>
          <p v-if="darijaArabic" class="darija-arabic" dir="rtl">{{ darijaArabic }}</p>
-         <audio ref="audioEl" :src="audioUrl" controls autoplay @ended="releaseAudio" />
+         <audio ref="audioEl" :src="audioUrl" controls autoplay @play="onAudioPlay" @ended="onAudioEnded" />
       </section>
    </main>
 
@@ -50,10 +50,10 @@ const audioEl = ref(null);
 const loading = ref(false);
 const error = ref('');
 
-function releaseAudio() {
+function discardAudio() {
   if (audioEl.value) {
     audioEl.value.src = '';
-    audioEl.value.load(); // resets AVAudioSession on iOS
+    audioEl.value.load();
   }
   if (audioUrl.value) {
     URL.revokeObjectURL(audioUrl.value);
@@ -61,12 +61,24 @@ function releaseAudio() {
   }
 }
 
+function onAudioPlay() {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.playbackState = 'playing';
+  navigator.mediaSession.setActionHandler('play', () => audioEl.value?.play());
+  navigator.mediaSession.setActionHandler('pause', () => audioEl.value?.pause());
+}
+
+function onAudioEnded() {
+  if ('mediaSession' in navigator)
+    navigator.mediaSession.playbackState = 'paused';
+}
+
 async function speak() {
    loading.value = true;
    error.value = '';
    darijaFrench.value = '';
    darijaArabic.value = '';
-   releaseAudio();
+   discardAudio();
 
    try {
       const res = await fetch('/speak', {
