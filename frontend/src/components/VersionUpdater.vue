@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /// <reference types="vite-plugin-pwa/vue" />
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import { ref, watch } from "vue";
+import { watch } from "vue";
 
 // check new version every 10s
 const { needRefresh, updateServiceWorker } = useRegisterSW({
@@ -10,19 +10,21 @@ const { needRefresh, updateServiceWorker } = useRegisterSW({
    },
 });
 
-const updating = ref(false);
+let updateTriggered = false;
 
 // Automatically update when new version is available
 watch(needRefresh, (value) => {
-   if (value && !updating.value) {
-      updating.value = true; // hide banner immediately — page will reload or fail silently
+   if (value && !updateTriggered) {
+      updateTriggered = true;
       updateServiceWorker(true);
+      // Fallback: force reload if the SW controllerchange never fires
+      setTimeout(() => window.location.reload(), 4000);
    }
 });
 </script>
 
 <template>
-   <div v-if="needRefresh && !updating" class="pwatoast">
+   <div v-if="needRefresh" class="pwatoast">
       Mise à jour en cours...
    </div>
 </template>
