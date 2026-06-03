@@ -28,7 +28,7 @@
          <h2>Darija</h2>
          <p class="darija-french">{{ darijaFrench }}</p>
          <p v-if="darijaArabic" class="darija-arabic" dir="rtl">{{ darijaArabic }}</p>
-         <audio :src="audioUrl" controls autoplay />
+         <audio ref="audioEl" :src="audioUrl" controls autoplay @ended="releaseAudio" />
       </section>
    </main>
 
@@ -46,16 +46,27 @@ const frenchText = ref('');
 const darijaFrench = ref('');
 const darijaArabic = ref('');
 const audioUrl = ref('');
+const audioEl = ref(null);
 const loading = ref(false);
 const error = ref('');
+
+function releaseAudio() {
+  if (audioEl.value) {
+    audioEl.value.src = '';
+    audioEl.value.load(); // resets AVAudioSession on iOS
+  }
+  if (audioUrl.value) {
+    URL.revokeObjectURL(audioUrl.value);
+    audioUrl.value = '';
+  }
+}
 
 async function speak() {
    loading.value = true;
    error.value = '';
    darijaFrench.value = '';
    darijaArabic.value = '';
-   if (audioUrl.value) URL.revokeObjectURL(audioUrl.value);
-   audioUrl.value = '';
+   releaseAudio();
 
    try {
       const res = await fetch('/speak', {
