@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /// <reference types="vite-plugin-pwa/vue" />
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 // check new version every 10s
 const { needRefresh, updateServiceWorker } = useRegisterSW({
@@ -10,12 +10,13 @@ const { needRefresh, updateServiceWorker } = useRegisterSW({
    },
 });
 
-let updateTriggered = false;
+const updating = ref(false);
 
-// Automatically update when new version is available
 watch(needRefresh, (value) => {
-   if (value && !updateTriggered) {
-      updateTriggered = true;
+   if (value && !updating.value) {
+      updating.value = true;
+      // updateServiceWorker() immediately resets needRefresh to false,
+      // so we use our own `updating` ref to keep the banner visible
       updateServiceWorker(true);
       // Fallback: force reload if the SW controllerchange never fires
       setTimeout(() => window.location.reload(), 4000);
@@ -24,7 +25,7 @@ watch(needRefresh, (value) => {
 </script>
 
 <template>
-   <div v-if="needRefresh" class="pwatoast">
+   <div v-if="updating" class="pwatoast">
       Mise à jour en cours...
    </div>
 </template>
