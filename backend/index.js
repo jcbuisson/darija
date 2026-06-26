@@ -12,7 +12,8 @@ app.post('/speak', async (req, res) => {
    const { text } = req.body;
 
    const translation = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      // model: 'gpt-4o',
+      model: 'gpt-5.5',
       messages: [
          {
             role: 'system',
@@ -28,7 +29,8 @@ app.post('/speak', async (req, res) => {
    const { french: darijaFrench, arabic: darijaArabic } = JSON.parse(translation.choices[0].message.content);
 
    const audio = await openai.audio.speech.create({
-      model: 'gpt-4o-mini-tts',
+      // model: 'gpt-4o-mini-tts',
+      model: 'gpt-5.5-mini-tts',
       voice: 'alloy',
       input: darijaArabic,
       instructions: 'Speak in Moroccan Darija. Natural, authentic Casablanca pronunciation.',
